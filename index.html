@@ -3,22 +3,123 @@
     <title>Arduino Sprite Painter | Manchaware</title>
 
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.0/jquery.js"></script>
+    <script type="text/javascript" src="js/colorpicker.min.js"></script>
     <script type="text/javascript" src="js/ArduinoSpritePainter.js"></script>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
     <link href="css/ArduinoSpritePainter.css" rel="stylesheet" type="text/css"/>
-
 </head>
 
 <body>
-    <div>
-        <h1>Arduino Sprite Painter</h1>
-    </div>
-    <div id="generated_code_container">
-        <div class="toolbar">
+    <div id="painter_container" class="expandable-container options-visible">
+        <h1>
+            <a href="#" class="button sprite icon-config selected" onclick="Manchaware.SpritePainter.toggleCodeOptions(this); return false;"></a>
+            Arduino Sprite Painter
+        </h1>
 
+        <div class="options-container">
+            <h3>Painter Options</h3>
+            <div class="input-group dimensions-container">
+                <label>
+                    Matrix Size
+                </label>
+                <input type="number" name="matrixWidth" onchange="Manchaware.SpritePainter.calculateNewSize();" />
+                <div class="left">x</div>
+                <input type="number" name="matrixHeight" onchange="Manchaware.SpritePainter.calculateNewSize();" />
+            </div>
+
+            <div class="toolbar">
+                <label>
+                    Insert Rows or Columns
+                </label>
+                
+                <a href="#" class="button" title="Insert Row Above" onclick="Manchaware.SpritePainter.insertRow(true); return false;"><span class="sprite icon-insertRowAbove"></span></a>
+
+                <a href="#" class="button" title="Insert Row Below" onclick="Manchaware.SpritePainter.insertRow(); return false;"><span class="sprite icon-insertRowBelow"></span></a>
+                
+            </div>
+
+            <div class="toolbar">
+                <label>
+                    Delete Rows or Columns
+                </label>
+                
+                <a href="#" class="button" title="Remove Row Above" onclick="Manchaware.SpritePainter.removeRow(true); return false;"><span class="sprite icon-removeRowAbove"></span></a>
+                
+                <a href="#" class="button" title="Remove Row Below" onclick="Manchaware.SpritePainter.removeRow(); return false;"><span class="sprite icon-removeRowBelow"></span></a>
+                
+            </div>
         </div>
 
-        <textarea id="code"></textarea>
+        <div class="content-container">
+            <label>
+                Brush color
+                <span class="color-picker-container">
+                    <span class="swatch" style="background:white;" onclick="Manchaware.SpritePainter.showColorModal(this);"></span>
+                    <input type="text" name="brushColor" value="#ffffff" onfocus="Manchaware.SpritePainter.showColorModal(this);" onkeyup="Manchaware.SpritePainter.colorPicker.setHex($(this).val());" />
+                </span>
+            </label>
+
+            <div id="sprite_canvas_container">
+            </div>
+
+            <div id="color_picker_modal" class="modal" style="display:none;">
+                <div id="color-picker" class="cp-default"></div>
+
+                <input type="button" value="Okay" onclick="Manchaware.SpritePainter.hideColorModal();" />
+            </div>
+        </div>
+
+    </div>
+    <div id="generated_code_container" class="expandable-container options-visible">
+        <h2>
+            <a href="#" class="button sprite icon-config selected" onclick="Manchaware.SpritePainter.toggleCodeOptions(this); return false;"></a>
+            Generated Code
+        </h2>
+        
+        <div class="options-container">
+            <h3>Code Options</h3>
+
+            <label>
+                Graphics/Panel Library
+                <select>
+                    <option>Adafruit RGB matrix Panel</option>
+                </select>
+            </label>
+            <div class="input-group">
+                <label>
+                    <input type="checkbox" name="doGenerateMethod" onchange="Manchaware.SpritePainter.toggleSubGroupOptions(this); return false;" style="width:auto;"/>
+                    Generate method?
+                </label>
+                <label class="sub-group">
+                    <input type="text" name="methodName" value="drawSprite" onkeydown="if(event.which == 32){event.preventDefault();} " onkeyup="Manchaware.SpritePainter.generateCode();" />
+                </label>
+            </div>
+
+            <label>
+                <input type="checkbox" name="doEnableXYOffset" onchange="Manchaware.SpritePainter.generateCode();" style="width:auto;" checked="checked"/>
+                Enable X/Y offset?
+            </label>
+
+            <div class="input-group">
+                <label>
+                    <input type="checkbox" name="doUseMatrixInstance" onchange="Manchaware.SpritePainter.toggleSubGroupOptions(this); return false;" style="width:auto;" checked="checked"/>
+                    Use matrix instance?
+                </label>
+                <label class="sub-group" style="display:block;">
+                    <input type="text" name="matrixInstanceName" value="matrix" onkeydown="if(event.which == 32){event.preventDefault();} " onkeyup="Manchaware.SpritePainter.generateCode();" />
+                </label>
+            </div>
+
+            <label>
+                <input type="checkbox" name="doUseColorVariable" onchange="Manchaware.SpritePainter.generateCode();" style="width:auto;"/>
+                Use color variables?
+            </label>
+            
+        </div>
+
+        <div class="code-container">
+            <textarea id="code">//Arduino code generated here</textarea>
+        </div>
     </div>
 </body>
 </html>
