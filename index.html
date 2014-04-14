@@ -51,14 +51,22 @@
         </div>
 
         <div class="content-container">
-            <label>
-                Brush color
-                <span class="color-picker-container">
-                    <span class="swatch" style="background:white;" onclick="Manchaware.SpritePainter.showColorModal(this);"></span>
-                    <input type="text" name="brushColor" value="#ffffff" onfocus="Manchaware.SpritePainter.showColorModal(this);" onkeyup="Manchaware.SpritePainter.colorPicker.setHex($(this).val());" />
-                </span>
-            </label>
+            <div class="colors-container">
+                <label>
+                    Brush color
+                    <span class="color-picker-container">
+                        <span class="swatch" style="background:white;" onclick="Manchaware.SpritePainter.showColorModal(this);"></span>
+                        <input type="text" name="brushColor" value="#ffffff" onfocus="Manchaware.SpritePainter.showColorModal(this);" onkeyup="Manchaware.SpritePainter.colorPicker.setHex($(this).val());" />
+                    </span>
+                </label>
 
+                <label class="colors-used-label" style="display:none;">
+                    Colors used
+                </label>
+                <div class="colors-used-container">
+                    
+                </div>
+            </div>
             <div id="sprite_canvas_container">
             </div>
 
@@ -111,15 +119,21 @@
             </div>
 
             <label>
-                <input type="checkbox" name="doUseColorVariable" onchange="Manchaware.SpritePainter.generateCode();" style="width:auto;"/>
+                <input type="checkbox" name="doUseColorVariable" onchange="Manchaware.SpritePainter.generateCode();" style="width:auto;" checked="checked"/>
                 Use color variables?
             </label>
             
         </div>
 
         <div class="code-container">
-            <textarea id="code">//Arduino code generated here</textarea>
+            <textarea id="code" spellcheck="false">//Arduino code generated here</textarea>
         </div>
+    </div>
+    <div class="helpers" style="display:none;">
+        <span class="color-picker-container color-picker-container-helper">
+            <span class="new-swatch" style="background:white;"></span>
+            <input type="text" name="brushColor" value="#ffffff"/>
+        </span>
     </div>
 </body>
 </html>

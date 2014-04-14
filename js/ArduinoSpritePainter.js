@@ -40,6 +40,8 @@ Manchaware.SpritePainter = {
                 self.paintStartElement = $(event.target);
                 self.isPainted = $(event.target).hasClass('painted');
                 self.canPaint = true;
+
+                self.hideColorModal();
             }
         });
 
@@ -191,6 +193,8 @@ Manchaware.SpritePainter = {
 
 
         //calculate colors
+        $('.colors-used-label').hide();
+        $('.colors-used-container').html("");
         if (doUseColorVariable) {
             var colors = new Array();
             var colorsRGB = new Array();
@@ -201,6 +205,12 @@ Manchaware.SpritePainter = {
                     if (colors.indexOf(color.hex) == -1) {
                         colors.push(color.hex);
                         colorsRGB.push(color.rgb);
+
+                        var helper = $('.helpers .color-picker-container-helper').clone(true);
+                        helper.removeClass('color-picker-container-helper');
+                        helper.find('.new-swatch').css('backgroundColor', color.hex);
+                        helper.find('input[name="brushColor"]').val(color.hex);
+                        $('.colors-used-container').append(helper);
                     }
                 }
             });
@@ -214,6 +224,9 @@ Manchaware.SpritePainter = {
                 code += "Color888(" + colorsRGB[i].r + ", " + colorsRGB[i].g + ", " + colorsRGB[i].b + ", true); //" + colors[i] + "\n";
             }
 
+            if (colors.length > 0) {
+                $('.colors-used-label').show();
+            }
             code += "\n";
         }
 

@@ -36,14 +36,14 @@ h3 {
     padding:0;
     margin-bottom: 10px;
 }
-input[type=text], textarea, .swatch, input[type=number] {
+input[type=text], textarea, .swatch, .new-swatch, input[type=number] {
     background:#1F1F1F;
     color:#cecece;
     padding:10px;
     font-size:13px;
     box-shadow:0 1px 3px rgba(0, 0, 0, 0.7) inset;
 }
-input[type=text], .swatch, input[type=number] {
+input[type=text], .swatch, .new-swatch, input[type=number] {
     border:1px solid #313131;
     border-radius:4px;
     width:100%;
@@ -250,7 +250,7 @@ only screen and (min-device-pixel-ratio: 2) {
     display: block;
 }
 
-.color-picker-container .swatch {
+.swatch, .new-swatch {
     float:left;
     width:30px;
     height:16px;
@@ -281,6 +281,9 @@ only screen and (min-device-pixel-ratio: 2) {
     margin:12px 10px 0;
 }
 
+.colors-used-label {
+    margin:0;
+}
 /**************
  Sprite Canvas
 */
@@ -288,7 +291,9 @@ only screen and (min-device-pixel-ratio: 2) {
     background:#1F1F1F;
     border-top:1px solid #424242;
     border-right: 1px solid #424242;
-    
+    position: absolute;
+    left: 172px;
+    top:0;
 }
 
 .sprite-row:after {
