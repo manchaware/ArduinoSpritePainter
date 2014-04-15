@@ -48,6 +48,8 @@ input[type=text], .swatch, .new-swatch, input[type=number] {
     border-radius:4px;
     width:100%;
     margin-top:5px;
+    margin-bottom:0;
+    height:38px;
 }
 
 textarea {
