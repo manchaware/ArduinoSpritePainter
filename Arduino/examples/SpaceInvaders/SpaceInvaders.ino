@@ -1,5 +1,6 @@
-#include <Adafruit_GFX.h>
-#include <RGBmatrixPanel.h>
+//Required Libraries
+#include <Adafruit_GFX.h> // https://github.com/adafruit/Adafruit-GFX-Library
+#include <RGBmatrixPanel.h> // https://github.com/adafruit/RGB-matrix-Panel
 
 #define CLK 11
 #define LAT 10
