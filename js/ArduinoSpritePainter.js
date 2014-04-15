@@ -103,17 +103,29 @@ Manchaware.SpritePainter = {
         var newWidth = $('input[name="matrixWidth"]').val();
         var newHeight = $('input[name="matrixHeight"]').val();
 
+        var difference = 0;
+        
         if (newWidth > this.width) {
-            var difference = newWidth - this.width;
+            difference = newWidth - this.width;
             for (var i = 0; i < difference; i++) {
                 this.insertColumn();
+            }
+        } else if (newWidth < this.width) {
+            difference = this.width - newWidth;
+            for (var i = 0; i < difference; i++) {
+                this.removeColumn();
             }
         }
 
         if (newHeight > this.height) {
-            var difference = newHeight - this.height;
+            difference = newHeight - this.height;
             for (var i = 0; i < difference; i++) {
                 this.insertRow();
+            }
+        } else if (newHeight < this.height) {
+            difference = this.height - newHeight;
+            for (var i = 0; i < difference; i++) {
+                this.removeRow();
             }
         }
     },
