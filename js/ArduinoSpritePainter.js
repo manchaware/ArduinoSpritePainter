@@ -206,7 +206,7 @@ Manchaware.SpritePainter = {
             });
 
             for (var i = 0; i < colors.length; i++) {
-                code += "  color" + i + " = ";
+                code += "  int color" + i + " = ";
                 if (doUseMatrixInstance) {
                     code += $('input[name="matrixInstanceName"]').val() + ".";
                 }
