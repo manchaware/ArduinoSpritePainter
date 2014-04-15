@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <div id="painter_container" class="expandable-container options-visible">
+    <div id="painter_container" class="expandable-container options-visible noselect">
         <h1>
             <a href="#" class="button sprite icon-config selected" onclick="Manchaware.SpritePainter.toggleCodeOptions(this); return false;"></a>
             Arduino Sprite Painter
@@ -36,6 +36,10 @@
 
                 <a href="#" class="button" title="Insert Row Below" onclick="Manchaware.SpritePainter.insertRow(); return false;"><span class="sprite icon-insertRowBelow"></span></a>
                 
+                <a href="#" class="button" title="Insert Row Above" onclick="Manchaware.SpritePainter.insertColumn(true); return false;"><span class="sprite icon-insertColBefore"></span></a>
+
+                <a href="#" class="button" title="Insert Row Below" onclick="Manchaware.SpritePainter.insertColumn(); return false;"><span class="sprite icon-insertColAfter"></span></a>
+
             </div>
 
             <div class="toolbar">
@@ -47,6 +51,20 @@
                 
                 <a href="#" class="button" title="Remove Row Below" onclick="Manchaware.SpritePainter.removeRow(); return false;"><span class="sprite icon-removeRowBelow"></span></a>
                 
+                <a href="#" class="button" title="Remove Row Above" onclick="Manchaware.SpritePainter.removeColumn(true); return false;"><span class="sprite icon-removeColBefore"></span></a>
+                
+                <a href="#" class="button" title="Remove Row Below" onclick="Manchaware.SpritePainter.removeColumn(); return false;"><span class="sprite icon-removeColAfter"></span></a>
+            </div>
+
+            <div class="toolbar" style="display:none;">
+                <label>
+                    Flip Canvas
+                </label>
+                
+                <a href="#" class="button" title="Remove Row Above" onclick="Manchaware.SpritePainter.removeRow(true); return false;"><span class="sprite icon-flipHorizRight"></span></a>
+                
+                <a href="#" class="button" title="Remove Row Below" onclick="Manchaware.SpritePainter.removeRow(); return false;"><span class="sprite icon-flipHorizLeft"></span></a>
+                
             </div>
         </div>
 
@@ -54,9 +72,9 @@
             <div class="colors-container">
                 <label>
                     Brush color
-                    <span class="color-picker-container">
-                        <span class="swatch" style="background:white;" onclick="Manchaware.SpritePainter.showColorModal(this);"></span>
-                        <input type="text" name="brushColor" value="#ffffff" onfocus="Manchaware.SpritePainter.showColorModal(this);" onkeyup="Manchaware.SpritePainter.colorPicker.setHex($(this).val());" />
+                    <span class="master-color-picker-container color-picker-container">
+                        <span class="swatch" style="background:white;" onclick="Manchaware.SpritePainter.updateColorPicker(this, false);"></span>
+                        <input type="text" name="brushColor" value="#ffffff" onfocus="Manchaware.SpritePainter.updateColorPicker($(this).prev(), false);" onkeyup="Manchaware.SpritePainter.colorPicker.setHex($(this).val());" />
                     </span>
                 </label>
 
@@ -76,15 +94,15 @@
                 <input type="button" value="Okay" onclick="Manchaware.SpritePainter.hideColorModal();" />
             </div>
         </div>
-
     </div>
+
     <div id="generated_code_container" class="expandable-container options-visible">
         <h2>
             <a href="#" class="button sprite icon-config selected" onclick="Manchaware.SpritePainter.toggleCodeOptions(this); return false;"></a>
             Generated Code
         </h2>
         
-        <div class="options-container">
+        <div class="options-container noselect">
             <h3>Code Options</h3>
 
             <label>
@@ -122,7 +140,6 @@
                 <input type="checkbox" name="doUseColorVariable" onchange="Manchaware.SpritePainter.generateCode();" style="width:auto;" checked="checked"/>
                 Use color variables?
             </label>
-            
         </div>
 
         <div class="code-container">
@@ -132,7 +149,8 @@
     <div class="helpers" style="display:none;">
         <span class="color-picker-container color-picker-container-helper">
             <span class="new-swatch" style="background:white;"></span>
-            <input type="text" name="brushColor" value="#ffffff"/>
+            <input type="text" name="brushColor" value="#ffffff" />
+            <a href="#" class="eyedropper" title="Use this as brush color" onclick="Manchaware.SpritePainter.colorPicker.setHex($(this).prev().val()); return false;"><span class="sprite icon-eyedropper"></span></a>
         </span>
     </div>
 </body>
