@@ -223,28 +223,30 @@ Manchaware.SpritePainter = {
 
 
         //calculate colors
-        $('.colors-used-label').hide();
+        $('.colors-used-label').show();
         $('.colors-used-container').html("");
-        if (doUseColorVariable) {
-            var colors = new Array();
-            var colorsRGB = new Array();
+        
+        var colors = new Array();
+        var colorsRGB = new Array();
 
-            $('.pixel.painted').each(function(index, pixel){
-                if ($(pixel).hasClass('painted')) {
-                    var color = $(pixel).data('color');
-                    if (colors.indexOf(color.hex) == -1) {
-                        colors.push(color.hex);
-                        colorsRGB.push(color.rgb);
+        $('.pixel.painted').each(function(index, pixel){
+            if ($(pixel).hasClass('painted')) {
+                var color = $(pixel).data('color');
+                if (colors.indexOf(color.hex) == -1) {
+                    colors.push(color.hex);
+                    colorsRGB.push(color.rgb);
 
-                        var helper = $('.helpers .color-picker-container-helper').clone(true);
-                        helper.removeClass('color-picker-container-helper');
-                        helper.find('.new-swatch').css('backgroundColor', color.hex);
-                        helper.find('input[name="brushColor"]').val(color.hex);
-                        $('.colors-used-container').append(helper);
-                    }
+                    var helper = $('.helpers .color-picker-container-helper').clone(true);
+                    helper.removeClass('color-picker-container-helper');
+                    helper.find('.new-swatch').css('backgroundColor', color.hex);
+                    helper.find('input[name="brushColor"]').val(color.hex);
+                    $('.colors-used-container').append(helper);
                 }
-            });
+            }
+        });
 
+
+        if (doUseColorVariable) {
             for (var i = 0; i < colors.length; i++) {
                 code += "  uint16_t color" + i + " = ";
                 if (doUseMatrixInstance) {
@@ -259,7 +261,6 @@ Manchaware.SpritePainter = {
             }
             code += "\n";
         }
-
 
         //calculate painted pixels
         $('.sprite-row').each(function(y, row){
