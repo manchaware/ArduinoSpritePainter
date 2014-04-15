@@ -36,14 +36,14 @@ h3 {
     padding:0;
     margin-bottom: 10px;
 }
-input[type=text], textarea, .swatch, input[type=number] {
+input[type=text], textarea, .swatch, .new-swatch, input[type=number] {
     background:#1F1F1F;
     color:#cecece;
     padding:10px;
     font-size:13px;
     box-shadow:0 1px 3px rgba(0, 0, 0, 0.7) inset;
 }
-input[type=text], .swatch, input[type=number] {
+input[type=text], .swatch, .new-swatch, input[type=number] {
     border:1px solid #313131;
     border-radius:4px;
     width:100%;
@@ -86,6 +86,15 @@ label, .input-group {
     font-size: 13px;
 }
 
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 .left {
     float:left;
 }
@@ -124,7 +133,7 @@ label, .input-group {
 only screen and (min-device-pixel-ratio: 2) {
     .sprite {
         background:url(../img/sprite@2x.png);
-        background-size:256px 16px;
+        background-size:288px 32px;
     }
  
 }
@@ -192,6 +201,48 @@ only screen and (min-device-pixel-ratio: 2) {
     background-position: -144px 0;   
 }
 
+.icon-insertColBefore {
+    background-position: -160px 0;
+}
+.icon-insertColBefore:active {
+    background-position: -176px 0;
+}
+
+.icon-insertColAfter {
+    background-position: -224px 0;
+}
+.icon-insertColAfter:active {
+    background-position: -240px 0;
+}
+
+.icon-removeColBefore {
+    background-position: -192px 0;
+}
+.icon-removeColBefore:active {
+    background-position: -208px 0;
+}
+
+.icon-removeColAfter {
+    background-position: -256px 0;
+}
+.icon-removeColAfter:active {
+    background-position: -272px 0;
+}
+
+.icon-flipHorizRight {
+    background-position: -32px -16px;
+}
+
+.icon-flipHorizLeft {
+    background-position: -64px -16px;
+}
+.icon-eyedropper {
+    width:16px;
+    height:16px;
+    display: block;
+    background-position:0 -16px;
+}
+
 .modal {
     position: absolute;
     z-index: 1000;
@@ -250,16 +301,34 @@ only screen and (min-device-pixel-ratio: 2) {
     display: block;
 }
 
-.color-picker-container .swatch {
+.swatch, .new-swatch {
     float:left;
     width:30px;
     height:16px;
     margin-top: 5px;
     border-color:rgba(255, 255, 255, 0.18);
+    border-radius:4px 0 0 4px;
 }
 
+.color-picker-container {
+    position: relative;
+}
 .color-picker-container input[name=brushColor] {
     width:100px;
+    border-radius: 0 4px 4px 0;
+}
+
+.color-picker-container .eyedropper {
+    position: absolute;
+    width:16px;
+    height:16px;
+    left:122px;
+    top:12px;
+    border-radius: 2px;
+    padding:4px;
+}
+.color-picker-container .eyedropper:hover {
+    background:#444444;
 }
 
 #color_picker_modal {
@@ -281,6 +350,9 @@ only screen and (min-device-pixel-ratio: 2) {
     margin:12px 10px 0;
 }
 
+.colors-used-label {
+    margin:0;
+}
 /**************
  Sprite Canvas
 */
@@ -288,7 +360,9 @@ only screen and (min-device-pixel-ratio: 2) {
     background:#1F1F1F;
     border-top:1px solid #424242;
     border-right: 1px solid #424242;
-    
+    position: absolute;
+    left: 172px;
+    top:0;
 }
 
 .sprite-row:after {

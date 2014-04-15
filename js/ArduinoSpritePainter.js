@@ -9,13 +9,27 @@ Manchaware.SpritePainter = {
         hex : '#ffffff',
         rgb : {r:255, g:255, b:255}
     },
+    setColorPickerContext: function(swatch, input) {
+        this.swatchContext = swatch;
+        this.inputContext = input;
+    },
+
     setCurrentColor: function(hex, hsv, rgb) {
         this.brushColor.rgb = rgb;
         this.brushColor.hsv = hsv;
         this.brushColor.hex = hex;
 
-        $('.swatch').css('backgroundColor', hex);
-        $('input[name="brushColor"]').val(hex);
+        if (this.doUpdatePixels) {
+            $('.pixel[data-color="' + this.inputContext.val() + '"]').each(function(index, pixel){
+                pixel = $(pixel);
+
+                pixel.css('backgroundColor', hex);
+                pixel.attr('data-color', hex);
+            });
+        }
+
+        this.swatchContext.css('backgroundColor', hex);
+        this.inputContext.val(hex);
     },
     generateArtboard: function(width, height) {
         //must generate columns first to increment width
@@ -40,6 +54,8 @@ Manchaware.SpritePainter = {
                 self.paintStartElement = $(event.target);
                 self.isPainted = $(event.target).hasClass('painted');
                 self.canPaint = true;
+
+                self.hideColorModal();
             }
         });
 
@@ -51,8 +67,7 @@ Manchaware.SpritePainter = {
                 }
 
                 if (pixel.hasClass('painted')) {
-                    pixel.css('backgroundColor', self.brushColor.hex);
-                    pixel.data('color', jQuery.extend(true, {}, self.brushColor));
+                    self.paintPixel(pixel);
                 } else {
                     pixel.css('background-color', 'transparent');
                 }
@@ -68,9 +83,7 @@ Manchaware.SpritePainter = {
                 var pixel = $(event.target);
 
                 if (!self.isPainted) {
-                    pixel.addClass('painted');
-                    pixel.css('background-color', self.brushColor.hex);
-                    pixel.data('color', jQuery.extend(true, {}, self.brushColor));
+                    self.paintPixel(pixel);
                 } else {
                     pixel.removeClass('painted');
                     pixel.css('background-color', 'transparent');
@@ -79,21 +92,40 @@ Manchaware.SpritePainter = {
         });
     },
 
+    paintPixel: function(pixel) {
+        pixel.addClass('painted');
+        pixel.css('background-color', this.brushColor.hex);
+        pixel.data('color', jQuery.extend(true, {}, this.brushColor));
+        pixel.attr('data-color', this.brushColor.hex);
+    },
+
     calculateNewSize: function() {
         var newWidth = $('input[name="matrixWidth"]').val();
         var newHeight = $('input[name="matrixHeight"]').val();
 
+        var difference = 0;
+        
         if (newWidth > this.width) {
-            var difference = newWidth - this.width;
+            difference = newWidth - this.width;
             for (var i = 0; i < difference; i++) {
                 this.insertColumn();
+            }
+        } else if (newWidth < this.width) {
+            difference = this.width - newWidth;
+            for (var i = 0; i < difference; i++) {
+                this.removeColumn();
             }
         }
 
         if (newHeight > this.height) {
-            var difference = newHeight - this.height;
+            difference = newHeight - this.height;
             for (var i = 0; i < difference; i++) {
                 this.insertRow();
+            }
+        } else if (newHeight < this.height) {
+            difference = this.height - newHeight;
+            for (var i = 0; i < difference; i++) {
+                this.removeRow();
             }
         }
     },
@@ -130,7 +162,7 @@ Manchaware.SpritePainter = {
     },
 
     insertColumn: function(doPrepend) {
-        for (var i = 0; i < this.width; i++) {
+        for (var i = 0; i < this.height; i++) {
             var row = $('.sprite-row').eq(i);
             var pixel = $('<div class="pixel"></div>');
             this.bindEvents(pixel);
@@ -147,7 +179,7 @@ Manchaware.SpritePainter = {
     },
 
     removeColumn: function(doRemoveFirst) {
-        for (var i = 0; i < this.width; i++) {
+        for (var i = 0; i < this.height; i++) {
             var pixels = $('.sprite-row').eq(i).find('.pixel');
             
             if (doRemoveFirst) {
@@ -191,6 +223,8 @@ Manchaware.SpritePainter = {
 
 
         //calculate colors
+        $('.colors-used-label').hide();
+        $('.colors-used-container').html("");
         if (doUseColorVariable) {
             var colors = new Array();
             var colorsRGB = new Array();
@@ -201,12 +235,18 @@ Manchaware.SpritePainter = {
                     if (colors.indexOf(color.hex) == -1) {
                         colors.push(color.hex);
                         colorsRGB.push(color.rgb);
+
+                        var helper = $('.helpers .color-picker-container-helper').clone(true);
+                        helper.removeClass('color-picker-container-helper');
+                        helper.find('.new-swatch').css('backgroundColor', color.hex);
+                        helper.find('input[name="brushColor"]').val(color.hex);
+                        $('.colors-used-container').append(helper);
                     }
                 }
             });
 
             for (var i = 0; i < colors.length; i++) {
-                code += "  color" + i + " = ";
+                code += "  uint16_t color" + i + " = ";
                 if (doUseMatrixInstance) {
                     code += $('input[name="matrixInstanceName"]').val() + ".";
                 }
@@ -214,42 +254,46 @@ Manchaware.SpritePainter = {
                 code += "Color888(" + colorsRGB[i].r + ", " + colorsRGB[i].g + ", " + colorsRGB[i].b + ", true); //" + colors[i] + "\n";
             }
 
+            if (colors.length > 0) {
+                $('.colors-used-label').show();
+            }
             code += "\n";
         }
 
 
         //calculate painted pixels
         $('.sprite-row').each(function(y, row){
-            $(row).find('.pixel.painted').each(function(x, pixel){
+            $(row).find('.pixel').each(function(x, pixel){
                 pixel = $(pixel);
-                var color = pixel.data('color');
-                
-                code += "  ";
+                if (pixel.hasClass('painted')) {
+                    var color = pixel.data('color');
+                    
+                    code += "  ";
 
-                if (doUseMatrixInstance) {
-                    code += $('input[name="matrixInstanceName"]').val() + ".";
-                }
-
-                code += "drawPixel(";
-
-                if (doEnableXYOffset) {
-                    code += "x + " + x + ", y + " + y + ", ";
-                } else {
-                    code += x + ", " + y + ", ";
-                }
-
-                if (doUseColorVariable) {
-                    code += "color" + colors.indexOf(color.hex);
-                } else {
                     if (doUseMatrixInstance) {
                         code += $('input[name="matrixInstanceName"]').val() + ".";
                     }
 
-                    code += "Color888(" + color.rgb.r + ", " + color.rgb.g + ", " + color.rgb.b + ", true)";
-                }
+                    code += "drawPixel(";
 
-                code += ");\n"
-                
+                    if (doEnableXYOffset) {
+                        code += "x + " + x + ", y + " + y + ", ";
+                    } else {
+                        code += x + ", " + y + ", ";
+                    }
+
+                    if (doUseColorVariable) {
+                        code += "color" + colors.indexOf(color.hex);
+                    } else {
+                        if (doUseMatrixInstance) {
+                            code += $('input[name="matrixInstanceName"]').val() + ".";
+                        }
+
+                        code += "Color888(" + color.rgb.r + ", " + color.rgb.g + ", " + color.rgb.b + ", true)";
+                    }
+
+                    code += ");\n"
+                }
             });
         });
 
@@ -281,13 +325,25 @@ Manchaware.SpritePainter = {
     },
     showColorModal: function(activator) {
         $('#color_picker_modal').css({
-            top : $(activator).offset().top
+            top : $(activator).offset().top - 5
         }).show();
 
         this.canPaint = false;
     },
     hideColorModal: function() {
         $('#color_picker_modal').hide();
+    },
+
+    updateColorPicker: function(activator, doUpdatePixels) {
+        this.swatchContext = $(activator);
+        this.inputContext = $(activator).next();
+        this.doUpdatePixels = doUpdatePixels;
+
+        this.showColorModal(activator);
+    },
+
+    map: function(x, in_min, in_max, out_min, out_max) {
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 };
 
@@ -296,5 +352,11 @@ $(function(){
 
     Manchaware.SpritePainter.colorPicker = ColorPicker($('#color-picker').get(0), function(hex, hsv, rgb) {
         Manchaware.SpritePainter.setCurrentColor(hex, hsv, rgb);
+    });
+
+    $(document).bind('mouseup', function(event){
+        if (event.which == 1) {
+            Manchaware.SpritePainter.canPaint = false;
+        }
     });
 });
