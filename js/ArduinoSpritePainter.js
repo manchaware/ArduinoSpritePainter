@@ -1,6 +1,11 @@
 if (typeof Manchaware == "undefined") { var Manchaware = {}; }
 
 Manchaware = $.extend({}, Manchaware || {});
+Manchaware.Detect = {
+    supportFile: function() {
+        return (window.File && window.FileReader && window.FileList && window.Blob);
+    }
+};
 
 Manchaware.SpritePainter = {
     width : 0,
@@ -343,6 +348,10 @@ Manchaware.SpritePainter = {
         this.showColorModal(activator);
     },
 
+    clearMatrix: function() {
+        $('.pixel').removeClass('painted').css('backgroundColor', 'transparent').attr('data-color', null);
+    },
+
     map: function(x, in_min, in_max, out_min, out_max) {
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
@@ -359,5 +368,34 @@ $(function(){
         if (event.which == 1) {
             Manchaware.SpritePainter.canPaint = false;
         }
+    });
+
+    if (!Manchaware.Detect.supportFile()) {
+        $('.input-export-container').detach();
+    }
+
+    $('.resizable').each(function(index, element) {
+        var activator = $(element).find('h2');
+        var isDragging = false;
+
+        var offsetY = 0;
+        $(activator).bind('mousedown', function(event) {
+            if (event.which == 1) {
+                console.log(event);
+                isDragging = true;
+                offsetY = event.offsetY;
+                $(activator).addClass('resize-vert');
+            }
+        });
+        $(document).bind('mouseup', function(event) {
+            isDragging = false;
+            $(activator).removeClass('resize-vert');
+        });
+
+        $(document).bind('mousemove', function(event){
+            if (isDragging) {
+                $(element).css("height", $(window).height() - event.pageY + offsetY);
+            }
+        });
     });
 });
