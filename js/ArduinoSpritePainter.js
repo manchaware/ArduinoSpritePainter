@@ -10,6 +10,7 @@ Manchaware.Detect = {
 Manchaware.SpritePainter = {
     width : 0,
     height : 0,
+    rotation : 0,
     brushColor : {
         hex : '#ffffff',
         rgb : {r:255, g:255, b:255}
@@ -133,6 +134,26 @@ Manchaware.SpritePainter = {
                 this.removeRow();
             }
         }
+    },
+
+    rotate: function(doRotateCCW) {
+        if (doRotateCCW) {
+            this.rotation -= 90;
+            if (this.rotation <= -360) {
+                this.rotation = 0;
+            }
+        } else {
+            this.rotation += 90;
+            if (this.rotation >= 360) {
+                this.rotation = 0;
+            }
+        }
+        console.log(this.rotation);
+        $('#sprite_canvas_container').css({
+            webkitTransform: "rotate(" + this.rotation + "deg)",
+            mozTransform: "rotate(" + this.rotation + "deg)",
+            Transform: "rotate(" + this.rotation + "deg)"
+        });
     },
 
     insertRow: function(doPrepend) {

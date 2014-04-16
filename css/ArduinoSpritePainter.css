@@ -252,6 +252,24 @@ only screen and (min-device-pixel-ratio: 2) {
 .icon-flipHorizLeft {
     background-position: -64px -16px;
 }
+
+.icon-rotateCW {
+    background-position: -192px -16px;
+}
+
+.icon-rotateCW:active {
+    background-position: -208px -16px;
+}
+
+.icon-rotateCCW {
+    background-position:-160px -16px;
+}
+
+.icon-rotateCCW:active {
+    background-position:-176px -16px;
+}
+
+
 .icon-eyedropper {
     width:16px;
     height:16px;
@@ -377,7 +395,7 @@ only screen and (min-device-pixel-ratio: 2) {
 */
 #sprite_canvas_container {
     background:#1F1F1F;
-    border-top:1px solid #424242;
+    border-top:5px solid #424242;
     border-right: 1px solid #424242;
     position: absolute;
     left: 172px;
