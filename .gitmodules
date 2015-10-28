@@ -1,0 +1,3 @@
+[submodule "js/FlexiColorPicker"]
+	path = js/FlexiColorPicker
+	url = https://github.com/DavidDurman/FlexiColorPicker
