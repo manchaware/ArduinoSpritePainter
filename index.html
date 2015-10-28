@@ -3,7 +3,7 @@
     <title>Arduino Sprite Painter | Manchaware</title>
 
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.0/jquery.js"></script>
-    <script type="text/javascript" src="js/colorpicker.min.js"></script>
+    <script type="text/javascript" src="js/FlexiColorPicker/colorpicker.min.js"></script>
     <script type="text/javascript" src="js/ArduinoSpritePainter.js"></script>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
     <link href="css/ArduinoSpritePainter.css" rel="stylesheet" type="text/css"/>
@@ -31,11 +31,11 @@
                 <label>
                     Insert Rows or Columns
                 </label>
-                
+
                 <a href="#" class="button" title="Insert Row Above" onclick="Manchaware.SpritePainter.insertRow(true); return false;"><span class="sprite icon-insertRowAbove"></span></a>
 
                 <a href="#" class="button" title="Insert Row Below" onclick="Manchaware.SpritePainter.insertRow(); return false;"><span class="sprite icon-insertRowBelow"></span></a>
-                
+
                 <a href="#" class="button" title="Insert Row Above" onclick="Manchaware.SpritePainter.insertColumn(true); return false;"><span class="sprite icon-insertColBefore"></span></a>
 
                 <a href="#" class="button" title="Insert Row Below" onclick="Manchaware.SpritePainter.insertColumn(); return false;"><span class="sprite icon-insertColAfter"></span></a>
@@ -46,13 +46,13 @@
                 <label>
                     Delete Rows or Columns
                 </label>
-                
+
                 <a href="#" class="button" title="Remove Row Above" onclick="Manchaware.SpritePainter.removeRow(true); return false;"><span class="sprite icon-removeRowAbove"></span></a>
-                
+
                 <a href="#" class="button" title="Remove Row Below" onclick="Manchaware.SpritePainter.removeRow(); return false;"><span class="sprite icon-removeRowBelow"></span></a>
-                
+
                 <a href="#" class="button" title="Remove Row Above" onclick="Manchaware.SpritePainter.removeColumn(true); return false;"><span class="sprite icon-removeColBefore"></span></a>
-                
+
                 <a href="#" class="button" title="Remove Row Below" onclick="Manchaware.SpritePainter.removeColumn(); return false;"><span class="sprite icon-removeColAfter"></span></a>
             </div>
 
@@ -60,11 +60,11 @@
                 <label>
                     Rotate Matrix
                 </label>
-                
+
                 <a href="#" class="button" title="Remove Row Below" onclick="Manchaware.SpritePainter.rotate(true); return false;"><span class="sprite icon-rotateCCW"></span></a>
-                
+
                 <a href="#" class="button" title="Remove Row Above" onclick="Manchaware.SpritePainter.rotate(); return false;"><span class="sprite icon-rotateCW"></span></a>
-                
+
             </div>
         </div>
 
@@ -82,7 +82,7 @@
                     Colors used
                 </label>
                 <div class="colors-used-container">
-                    
+
                 </div>
 
                 <button onclick="Manchaware.SpritePainter.clearMatrix(); return false;" style="width:152px;">Clear Sprite</button>
@@ -103,9 +103,9 @@
             <a href="#" class="button sprite icon-config selected" onclick="Manchaware.SpritePainter.toggleCodeOptions(this); return false;"></a>
             Generated Code
         </h2>
-        
+
         <div class="options-container noselect">
-            
+
 
             <h3>Code Options</h3>
 
