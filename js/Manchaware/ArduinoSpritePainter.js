@@ -14,6 +14,16 @@ Manchaware.Detect = {
     return window.File && window.FileReader && window.FileList && window.Blob;
   },
 };
+Manchaware.ColorUtil = {
+  componentToHex: function(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+  },
+
+  rgbToHex: function(r, g, b) {
+    return "#" + this.componentToHex(r) + this.componentToHex(g) + this.componentToHex(b);
+  }
+};
 Manchaware.CodeGenerator = {
   code: '',
   Base: {
@@ -57,12 +67,11 @@ Manchaware.CodeGenerator = {
       this.doUse32BitColor = $('input[name="doUse32BitColor"]').get(0).checked;
     }
   },
-}
+};
 Manchaware.CodeGenerator.Trellis = $.extend({
   generate: function () {
     this.getOptions();
 
-    console.log("Generating Trellis");
     var code = '';
 
     if (this.outputType == OUTPUT_TYPE.ARRAY) {
@@ -175,15 +184,13 @@ Manchaware.CodeGenerator.Trellis = $.extend({
 Manchaware.CodeGenerator.RGBMatrix = $.extend({
   generate: function () {
     this.getOptions();
-
-    console.log("Generating RGBMatrix");
   },
 }, Manchaware.CodeGenerator.Base);
 
 Manchaware.Matrix = {
   rotateCW: function(matrix) {
     var n = matrix.length;
-  
+
     // Transpose of matrix
     for (i = 0; i < n; i++) {
         for (j = i+1; j < n; j++) {
@@ -192,7 +199,7 @@ Manchaware.Matrix = {
             matrix[j][i] = temp;
         }
     }
-      
+
     // Reverse individual rows
     for (i = 0; i < n; i++) {
         var low = 0, high = n-1;
@@ -370,6 +377,34 @@ Manchaware.SpritePainter = {
       mozTransform: "rotate(" + this.rotation + "deg)",
       Transform: "rotate(" + this.rotation + "deg)",
     });
+  },
+
+  loadImage: function(e) {
+    var ctx = $('#image_canvas').get(0).getContext('2d');
+    var img = new Image;
+    img.src = URL.createObjectURL(e.target.files[0]);
+
+    img.onload = function() {
+      ctx.drawImage(img, 0, 0, this.width, this.height, 0, 0, Manchaware.SpritePainter.width, Manchaware.SpritePainter.height);
+
+      for (var row = 0; row < Manchaware.SpritePainter.height; row++) {
+        for (var col = 0; col < Manchaware.SpritePainter.width; col++) {
+          var imageData = ctx.getImageData(col, row, 1, 1).data;
+          var rgb = Manchaware.SpritePainter.brushColor.rgb = {
+            r: imageData[0],
+            g: imageData[1],
+            b: imageData[2]
+          };
+
+          var hex = Manchaware.ColorUtil.rgbToHex(rgb.r, rgb.g, rgb.b);
+          Manchaware.SpritePainter.brushColor.hex = hex;
+          Manchaware.SpritePainter.paintPixel($($($('.sprite-row').get(row)).find('.pixel').get(col)));
+        }
+      }
+
+      Manchaware.SpritePainter.generateColorPalette();
+      Manchaware.SpritePainter.generateCode();
+    }
   },
 
   insertRow: function (doPrepend) {
@@ -654,6 +689,8 @@ Manchaware.SpritePainter = {
       .removeClass("painted")
       .css("backgroundColor", "transparent")
       .attr("data-color", null);
+
+    $('input[name="imageFile"]').val("");
 
     this.generateCode();
   },

@@ -44,6 +44,11 @@ h3 {
   margin-bottom: 10px;
 }
 
+canvas {
+  position: absolute;
+  left: -1000000;
+}
+
 input[type=text],
 textarea,
 .swatch,
@@ -590,4 +595,13 @@ only screen and (min-device-pixel-ratio: 2) {
   border: 4px solid lightblue;
 
   background-color: white;
+}
+
+.action-toolbar {
+  border-top: 1px solid #0CF;
+  padding-top: 10px;
+  margin-top: 40px;
+}
+.action-toolbar button {
+  float: none;
 }

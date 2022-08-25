@@ -65,6 +65,20 @@
           <span class="sprite icon-removeColAfter"></span>
         </a>
       </div>
+
+      <div class="toolbar">
+        <label>
+          Load Image
+        </label>
+        <input name="imageFile" type="file" onchange="Manchaware.SpritePainter.loadImage(event); return false;">
+
+        <canvas id="image_canvas"></canvas>
+      </div>
+
+      <div class="action-toolbar">
+        <button onclick="Manchaware.SpritePainter.clearMatrix(); return false;" >Clear Sprite</button>
+      </div>
+
       <!-- <div class="toolbar" >
         <label>
           Rotate Matrix
@@ -93,8 +107,6 @@
           Colors used
         </label>
         <div class="colors-used-container"></div>
-
-        <button onclick="Manchaware.SpritePainter.clearMatrix(); return false;" style="width:152px;">Clear Sprite</button>
       </div>
       <div id="sprite_canvas_container">
       </div>
